@@ -7,8 +7,7 @@
     "email": "yura@arcmind.ai"
   },
   "homepage": "https://arcmind.ai",
-  "repository": "https://github.com/buildoak/arcmind-marketplace",
+  "repository": "https://github.com/arcmind-ai/arcmind-marketplace",
   "license": "MIT",
-  "keywords": ["nextjs", "supabase", "vercel", "agent-first", "code-review", "testing"],
-  "mcpServers": "./.mcp.json"
+  "keywords": ["nextjs", "supabase", "vercel", "agent-first", "code-review", "testing"]
 }
