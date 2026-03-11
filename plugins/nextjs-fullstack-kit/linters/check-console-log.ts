@@ -55,7 +55,7 @@ for (const file of files) {
 if (violations > 0) {
   console.error(`\n❌ ${violations} console.log violation(s) found.`);
   console.error(
-    `Use the structured logger from src/lib/logger.ts instead. It outputs JSON for Vercel runtime logs and integrates with Sentry.\n`
+    `Use the structured logger from src/lib/logger.ts instead. It outputs JSON for Vercel runtime logs.\n`
   );
   process.exit(1);
 } else {

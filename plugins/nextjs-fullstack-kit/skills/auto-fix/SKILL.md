@@ -2,7 +2,7 @@
 name: auto-fix
 description: End-to-end autonomous bug fix loop. Reproduces bug, records evidence, implements fix, validates, runs agent review, opens PR, and optionally auto-merges. Full Harness-style autonomy.
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, Agent, Skill
-argument-hint: <bug description, Sentry issue ID, or GitHub issue URL>
+argument-hint: <bug description or GitHub issue URL>
 ---
 
 # Autonomous Fix Loop
@@ -21,8 +21,8 @@ Default to `semi-auto` if not specified.
 ## Step 1: Reproduce the bug
 
 ### 1a. Gather context
-**If Sentry issue ID or GitHub issue URL:**
-- Use Sentry MCP / `gh issue view` to get full details
+**If GitHub issue URL:**
+- Use `gh issue view` to get full details
 - Extract: error message, stack trace, affected URL, steps to reproduce
 
 **If text description:**

@@ -51,7 +51,7 @@
 
 | What | Tool | Frequency |
 |------|------|-----------|
-| JS errors | Sentry | Real-time alerts |
+| JS errors | Structured logs + Vercel | Real-time alerts |
 | API latency | Vercel Analytics | Daily review |
 | DB performance | Supabase Dashboard | Weekly review |
 | Build size | Vercel build logs | Every deploy |
@@ -59,7 +59,7 @@
 
 ## Incident Response
 
-1. **Identify**: Check Sentry for the error
+1. **Identify**: Check structured logs and Vercel logs for the error
 2. **Scope**: Check Vercel for deploy issues, Supabase for data issues
 3. **Reproduce**: Use Playwright to navigate and screenshot
 4. **Fix**: Apply fix, validate (tests + linters), deploy

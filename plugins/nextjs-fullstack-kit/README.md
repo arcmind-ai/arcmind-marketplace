@@ -101,4 +101,3 @@ supabase link --project-ref <your-project-id>   # one-time
 
 - **Supabase MCP** — for `/db-migrate`, bug investigation
 - **Playwright MCP** — for `/worktree-test`, `/browser-inspect`, visual verification
-- **Sentry MCP** — for bug investigation

@@ -35,7 +35,7 @@ npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --
 Wait for it to complete, then install additional dependencies:
 
 ```bash
-npm install @supabase/supabase-js zod pino pino-pretty @sentry/nextjs
+npm install @supabase/supabase-js zod pino pino-pretty
 npm install -D tsx vitest @playwright/test supabase
 ```
 
@@ -557,10 +557,6 @@ Items flagged by `/gc-sweep` that cannot be auto-fixed.
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "@playwright/mcp"]
-    },
-    "sentry": {
-      "type": "http",
-      "url": "https://mcp.sentry.dev/mcp"
     }
   }
 }
@@ -591,10 +587,6 @@ SUPABASE_DB_URL=<auto-filled-by-supabase-local>
 # Get these from: supabase.com/dashboard → Settings → API
 SUPABASE_ACCESS_TOKEN=your-supabase-access-token
 SUPABASE_PROJECT_REF=your-project-ref
-
-# Sentry
-NEXT_PUBLIC_SENTRY_DSN=https://your-sentry-dsn
-SENTRY_AUTH_TOKEN=your-sentry-auth-token
 
 # App
 NEXT_PUBLIC_APP_URL=http://localhost:3000
@@ -686,7 +678,7 @@ Next.js + Supabase + Vercel with:
 - Domain architecture (types → db → service → route → component)
 - Custom linters (layers, console.log, file size)
 - Structured logging (pino → .logs/app.ndjson)
-- MCP integrations (Supabase, Playwright, Sentry)
+- MCP integrations (Supabase, Playwright)
 - Docs knowledge base (17 golden principles)
 - CI workflows (lint, test, doc validation)
 - Scripts (dev-server with worktree isolation)
@@ -708,7 +700,7 @@ Created:
   scripts/          — dev-server with worktree isolation
   docs/             — full knowledge base (17 golden principles)
   .github/workflows — CI + knowledge base validation
-  .mcp.json         — Supabase, Playwright, Sentry MCPs
+  .mcp.json         — Supabase, Playwright MCPs
 
 Next steps:
   1. Make sure Docker is running
