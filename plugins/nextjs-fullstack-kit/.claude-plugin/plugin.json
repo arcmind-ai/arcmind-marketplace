@@ -10,6 +10,5 @@
   "repository": "https://github.com/buildoak/arcmind-marketplace",
   "license": "MIT",
   "keywords": ["nextjs", "supabase", "vercel", "agent-first", "code-review", "testing"],
-  "hooks": "./hooks/hooks.json",
   "mcpServers": "./.mcp.json"
 }
