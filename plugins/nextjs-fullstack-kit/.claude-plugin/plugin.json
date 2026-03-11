@@ -1,6 +1,6 @@
 {
   "name": "nextjs-fullstack-kit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Agent-first development toolkit for Next.js + Supabase + Vercel projects.",
   "author": {
     "name": "Yura Oak",
