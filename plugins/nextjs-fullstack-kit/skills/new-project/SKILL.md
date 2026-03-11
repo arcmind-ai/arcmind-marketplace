@@ -25,10 +25,13 @@ Ask the user before overwriting any existing files.
 
 ## Step 1: Create Next.js project
 
-Only if no `package.json` exists:
+Only if no `package.json` exists.
+
+**$ARGUMENTS must contain a project name.** If not provided, ask the user for one. Always create in a new directory — never use `.` as the target:
 
 ```bash
-npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --no-import-alias --use-npm
+npx create-next-app@latest $ARGUMENTS --typescript --tailwind --eslint --app --src-dir --no-import-alias --use-npm --yes
+cd $ARGUMENTS
 ```
 
 Wait for it to complete, then install additional dependencies:
