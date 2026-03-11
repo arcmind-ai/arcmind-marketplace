@@ -7,27 +7,25 @@ argument-hint: "project-name"
 
 # New Project
 
-Bootstrap a new agent-first project in the current directory.
+Bootstrap a new agent-first project.
 
-If $ARGUMENTS contains a project name, create a new directory with that name first.
+**$ARGUMENTS must contain a project name.** If not provided, ask the user for one.
 
 ## Pre-flight
 
-Check what already exists:
+Check if the target directory already exists:
 ```bash
-ls package.json 2>/dev/null && echo "EXISTING_PROJECT" || echo "EMPTY_DIR"
+[ -d "$ARGUMENTS" ] && echo "DIR_EXISTS" || echo "DIR_FREE"
 ```
 
-- **EXISTING_PROJECT** → skip Step 1 (Next.js setup), proceed to Step 2 (add missing pieces)
-- **EMPTY_DIR** → full setup from Step 1
-
-Ask the user before overwriting any existing files.
+- **DIR_EXISTS** → check if it has `package.json`:
+  - Has `package.json` → `cd $ARGUMENTS`, skip Step 1, proceed to Step 2
+  - No `package.json` but has other files → **stop and ask the user** what to do. Do NOT delete, move, or work around existing files
+- **DIR_FREE** → full setup from Step 1
 
 ## Step 1: Create Next.js project
 
-Only if no `package.json` exists.
-
-**$ARGUMENTS must contain a project name.** If not provided, ask the user for one. Always create in a new directory — never use `.` as the target:
+Always create in a new directory — never use `.` as the target. Never move or delete existing files to work around conflicts:
 
 ```bash
 npx create-next-app@latest $ARGUMENTS --typescript --tailwind --eslint --app --src-dir --no-import-alias --use-npm --yes
