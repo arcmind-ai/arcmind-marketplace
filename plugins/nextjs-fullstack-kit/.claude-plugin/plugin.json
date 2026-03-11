@@ -9,5 +9,14 @@
   "homepage": "https://arcmind.ai",
   "repository": "https://github.com/arcmind-ai/arcmind-marketplace",
   "license": "MIT",
-  "keywords": ["nextjs", "supabase", "vercel", "agent-first", "code-review", "testing"]
+  "keywords": ["nextjs", "supabase", "vercel", "agent-first", "code-review", "testing"],
+  "commands": "./skills/",
+  "agents": [
+    "./agents/bug-detective.md",
+    "./agents/code-reviewer.md",
+    "./agents/db-architect.md",
+    "./agents/quality-guard.md",
+    "./agents/task-driver.md"
+  ],
+  "hooks": "./hooks/hooks.json"
 }
