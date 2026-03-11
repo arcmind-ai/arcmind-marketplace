@@ -2,7 +2,7 @@
 name: doc-gardening
 description: Scan docs/ for stale or inaccurate documentation. Cross-reference with actual code and fix discrepancies. Run periodically to keep docs fresh.
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, Agent
-argument-hint: [optional: specific doc file or directory to check]
+argument-hint: "path/to/doc"
 ---
 
 # Doc Gardening

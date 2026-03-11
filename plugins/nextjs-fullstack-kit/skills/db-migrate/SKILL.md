@@ -2,7 +2,7 @@
 name: db-migrate
 description: Create and apply a Supabase migration
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, Agent
-argument-hint: [description of schema change]
+argument-hint: "description of schema change"
 ---
 
 # Database Migration

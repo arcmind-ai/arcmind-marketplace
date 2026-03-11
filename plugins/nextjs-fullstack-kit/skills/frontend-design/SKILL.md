@@ -2,7 +2,7 @@
 name: frontend-design
 description: Generate distinctive, production-grade frontend interfaces that avoid generic AI aesthetics. Activates automatically during frontend work or on-demand for UI generation.
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, Agent
-argument-hint: [optional: description of the UI to build, e.g. "dashboard for music app", "landing page for AI startup"]
+argument-hint: "UI description"
 ---
 
 # Frontend Design

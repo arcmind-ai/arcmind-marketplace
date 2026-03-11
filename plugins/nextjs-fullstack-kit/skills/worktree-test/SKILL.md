@@ -2,7 +2,7 @@
 name: worktree-test
 description: Run tests in an isolated git worktree. Starts a dev server on a random port, runs Playwright tests, captures screenshots and console errors, then cleans up.
 allowed-tools: Read, Grep, Glob, Bash, Agent
-argument-hint: [optional: specific page or test to run]
+argument-hint: "test-or-page"
 ---
 
 # Worktree Isolation Test

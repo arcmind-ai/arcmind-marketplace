@@ -2,7 +2,7 @@
 name: new-project
 description: Bootstrap a new Next.js + Supabase + Vercel project. Creates app with domain architecture, linters, scripts, structured logging, CI, and full docs knowledge base.
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, Agent
-argument-hint: [optional: project name]
+argument-hint: "project-name"
 ---
 
 # New Project

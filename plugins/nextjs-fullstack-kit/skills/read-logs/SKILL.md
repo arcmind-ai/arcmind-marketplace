@@ -2,7 +2,7 @@
 name: read-logs
 description: Read and filter structured application logs. Supports per-worktree isolation, advanced jq queries, and standard filters (errors, slow queries, slow requests, vitals).
 allowed-tools: Read, Grep, Glob, Bash
-argument-hint: <errors|slow-queries|slow-requests|vitals|tail|query "jq expression"> [--worktree=ID]
+argument-hint: "errors|slow-queries|slow-requests|vitals|tail"
 ---
 
 # Read Application Logs

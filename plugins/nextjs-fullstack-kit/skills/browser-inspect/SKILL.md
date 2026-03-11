@@ -2,7 +2,7 @@
 name: browser-inspect
 description: Deep browser inspection using Playwright MCP. Runs critical user journeys, captures performance metrics, checks for JS errors, failed network requests, and accessibility issues.
 allowed-tools: Read, Grep, Glob, Bash, Agent
-argument-hint: [optional: specific page URL, journey name, or "all"]
+argument-hint: "url-or-journey"
 ---
 
 # Browser Inspection

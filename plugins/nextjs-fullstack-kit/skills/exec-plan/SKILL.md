@@ -2,7 +2,7 @@
 name: exec-plan
 description: Manage execution plans as first-class versioned artifacts. Create, update, and complete plans with progress logs and decision records.
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash, Agent
-argument-hint: <create|status|complete|list> [description or plan name]
+argument-hint: "create|status|complete|list description-or-plan-name"
 ---
 
 # Execution Plan Management
