@@ -1,0 +1,17 @@
+{
+  "name": "arcmind-marketplace",
+  "owner": {
+    "name": "Yura Oak",
+    "email": "yura@arcmind.ai"
+  },
+  "metadata": {
+    "description": "Agent-first development toolkit for Next.js + Supabase + Vercel projects."
+  },
+  "plugins": [
+    {
+      "name": "nextjs-fullstack-kit",
+      "source": "./plugins/nextjs-fullstack-kit",
+      "description": "Agent-first development toolkit for Next.js + Supabase + Vercel projects."
+    }
+  ]
+}

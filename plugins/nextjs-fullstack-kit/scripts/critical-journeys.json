@@ -1,0 +1,11 @@
+[
+  {
+    "name": "homepage-loads",
+    "description": "Verify the homepage loads without errors",
+    "steps": [
+      { "action": "navigate", "url": "/" },
+      { "action": "screenshot", "name": "homepage-loaded" }
+    ],
+    "max_duration_ms": 3000
+  }
+]

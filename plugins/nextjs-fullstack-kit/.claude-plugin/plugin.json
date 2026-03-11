@@ -1,0 +1,15 @@
+{
+  "name": "nextjs-fullstack-kit",
+  "version": "0.1.0",
+  "description": "Agent-first development toolkit for Next.js + Supabase + Vercel projects.",
+  "author": {
+    "name": "Yura Oak",
+    "email": "yura@arcmind.ai"
+  },
+  "homepage": "https://arcmind.ai",
+  "repository": "https://github.com/buildoak/arcmind-marketplace",
+  "license": "MIT",
+  "keywords": ["nextjs", "supabase", "vercel", "agent-first", "code-review", "testing"],
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
+}

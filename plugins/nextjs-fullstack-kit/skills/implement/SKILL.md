@@ -1,0 +1,181 @@
+---
+name: implement
+description: End-to-end feature implementation loop. Builds the feature, writes tests, validates, runs agent review, opens PR. Analogous to /auto-fix but for features and refactors.
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash, Agent, Skill
+argument-hint: <feature description or exec-plan task reference>
+---
+
+# Feature Implementation Loop
+
+Implement: **$ARGUMENTS**
+
+## Pre-flight
+
+### Check autonomy level
+Read `CLAUDE.md` for `autonomy_level`:
+- `assisted` → Stop after PR, ask human to review
+- `semi-auto` → Create PR, request human review (default)
+- `full-auto` → Full loop with auto-merge
+
+### Understand the task
+1. If $ARGUMENTS references an exec plan task → read the plan from `docs/exec-plans/active/` for full context
+2. Read `CLAUDE.md`, `ARCHITECTURE.md` for project conventions
+3. Search codebase for related existing code
+4. If task involves DB changes → delegate schema design to `db-architect` agent, run `/db-migrate` first
+
+## Step 1: Plan the implementation
+
+Before writing code, produce a brief plan:
+```
+### Implementation Plan
+- Files to create: [list]
+- Files to modify: [list]
+- Domain: [which domain in src/domains/]
+- Layers touched: [types / db / service / route / component]
+- Tests needed: [list]
+- DB migration needed: yes/no
+```
+
+## Step 2: Implement
+
+### 2a. Start dev server
+```bash
+[ -f supabase/config.toml ] && (supabase status >/dev/null 2>&1 || ./scripts/supabase-local.sh)
+./scripts/dev-server.sh
+```
+Parse JSON output to get `port`.
+
+### 2b. Build layer by layer
+Follow the architecture order — each layer depends only on previous:
+
+1. **types.ts** — domain types and Zod schemas
+2. **db.ts** — Supabase queries (if needed)
+3. **service.ts** — business logic
+4. **route.ts** — API route handlers with Zod validation
+5. **components/** — UI (if needed). When building UI, follow the `frontend-design` skill guidelines: choose a distinctive aesthetic direction, avoid generic AI look, use `next/font`, respect the project's existing design system.
+
+### 2c. Write tests alongside code
+For each layer:
+- Service function → `service.test.ts` (happy path + error case)
+- API route → `route.test.ts` (happy path + error + validation)
+- Tests must assert behavior, not just "doesn't throw"
+
+## Step 3: Validate
+
+### 3a. Run tests
+```bash
+npm run test 2>&1
+```
+
+### 3b. Run linters
+```bash
+npm run lint 2>&1 || true
+[ -f linters/check-layers.ts ] && npx tsx linters/check-layers.ts 2>&1 || true
+[ -f linters/check-console-log.ts ] && npx tsx linters/check-console-log.ts 2>&1 || true
+[ -f linters/check-file-size.ts ] && npx tsx linters/check-file-size.ts 2>&1 || true
+```
+
+### 3c. Check logs
+```bash
+grep '"level":50' .logs/app.ndjson | tail -5 || echo "No errors"
+```
+
+### 3d. Visual verification (if UI was changed)
+Use Playwright MCP:
+1. `browser_navigate` to the affected page on `http://localhost:{port}`
+2. `browser_take_screenshot`
+3. `browser_console_messages` — verify no JS errors
+4. `browser_network_requests` — verify no failed calls
+
+**If any validation fails** → fix and re-validate (max 3 attempts).
+On 3rd failure → stop, report what's broken, ask user for guidance.
+
+## Step 4: Self-review
+
+Check changes against:
+- [ ] Layer dependencies flow forward only
+- [ ] Zod validation at API boundaries
+- [ ] No `any` types, no `console.log`
+- [ ] `.error` checked before `.data` on Supabase calls
+- [ ] RLS policies for any new tables
+- [ ] No secrets hardcoded
+- [ ] No file > 400 lines
+- [ ] Tests cover new code
+
+Fix any issues found.
+
+## Step 5: Agent review
+
+Spawn a `code-reviewer` agent to review changes:
+
+```
+Review the changes: git diff main...HEAD
+Check: architecture, security, tests, performance, code quality
+Per project standards in REVIEW_STANDARDS.md and GOLDEN_PRINCIPLES.md
+Output ISSUE blocks and VERDICT: APPROVED or CHANGES_REQUESTED
+```
+
+- **APPROVED** → proceed to Step 6
+- **CHANGES_REQUESTED** → fix issues, re-run reviewer (max 3 iterations)
+- **3 failures** → escalate to human
+
+## Step 6: Commit changes
+
+Commit all changes with a descriptive message:
+```bash
+git add [changed files by name]
+git commit -m "[type]: [concise description]"
+```
+
+## Step 7: Create PR (only if running standalone)
+
+**If called from task-driver (executing an exec plan):** SKIP this step — task-driver creates one PR for the entire plan. Just commit and return.
+
+**If running standalone (user invoked directly):** Create a PR:
+
+```bash
+gh pr create \
+  --title "[type]: [concise description]" \
+  --body "$(cat <<'EOF'
+## Summary
+[bullet points of what was implemented]
+
+## Implementation
+- Domain: [domain name]
+- Layers: [types / db / service / route / component]
+- Migration: [yes/no]
+
+## Agent Review
+- Iterations: [count]
+- Verdict: APPROVED
+
+## Test plan
+- [ ] Unit tests pass
+- [ ] Linters pass
+- [ ] Agent review approved
+- [ ] Visual verification (if UI)
+
+---
+Generated by `/implement` — feature implementation loop
+EOF
+)"
+```
+
+Auto-merge rules (standalone only):
+- `full-auto` → wait for CI, check protected paths, merge if safe
+- `semi-auto` → add comment "Ready for human review"
+- `assisted` → notify user of PR URL
+
+## Step 8: Update exec plan (if applicable)
+
+If an active exec plan references this task:
+- Check off the related task
+- Increment agent run count
+- Add entry to Progress Log with commit hash and date
+- Commit: `docs: update exec plan progress`
+
+## Step 9: Clean up
+
+```bash
+./scripts/dev-server-stop.sh
+```

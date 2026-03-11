@@ -1,0 +1,13 @@
+{
+  "agent": {
+    "code-reviewer": {
+      "model": "sonnet"
+    },
+    "quality-guard": {
+      "model": "sonnet"
+    },
+    "bug-detective": {
+      "model": "sonnet"
+    }
+  }
+}

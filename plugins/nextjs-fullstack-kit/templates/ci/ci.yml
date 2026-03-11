@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: TypeScript
+        run: npx tsc --noEmit
+
+      - name: Vitest
+        run: npx vitest --run
+
+      - name: Lint — layer dependencies
+        run: npx tsx linters/check-layers.ts
+
+      - name: Lint — no console.log
+        run: npx tsx linters/check-console-log.ts
+
+      - name: Lint — file size
+        run: npx tsx linters/check-file-size.ts
+
+  validate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required doc files exist
+        run: |
+          REQUIRED_FILES=(
+            "CLAUDE.md"
+            "ARCHITECTURE.md"
+            "docs/SECURITY.md"
+            "docs/FRONTEND.md"
+            "docs/QUALITY_SCORE.md"
+            "docs/PRODUCT_SENSE.md"
+            "docs/PLANS.md"
+            "docs/DESIGN.md"
+            "docs/RELIABILITY.md"
+            "docs/GOLDEN_PRINCIPLES.md"
+            "docs/REVIEW_STANDARDS.md"
+            "docs/design-docs/index.md"
+          )
+          MISSING=0
+          for f in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$f" ]; then
+              echo "MISSING: $f"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          if [ $MISSING -gt 0 ]; then
+            echo "❌ $MISSING required doc file(s) missing."
+            exit 1
+          fi
+          echo "✅ All required doc files present."
+
+      - name: Check CLAUDE.md length
+        run: |
+          LINES=$(wc -l < CLAUDE.md)
+          if [ "$LINES" -gt 150 ]; then
+            echo "❌ CLAUDE.md is $LINES lines (max 150). Keep it concise."
+            exit 1
+          fi
+          echo "✅ CLAUDE.md is $LINES lines (≤150)."

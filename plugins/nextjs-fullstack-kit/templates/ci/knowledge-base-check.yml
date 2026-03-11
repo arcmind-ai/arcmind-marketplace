@@ -1,0 +1,50 @@
+name: Knowledge Base Check
+
+on:
+  push:
+    paths:
+      - "docs/**"
+      - "CLAUDE.md"
+      - "ARCHITECTURE.md"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "CLAUDE.md"
+      - "ARCHITECTURE.md"
+
+jobs:
+  validate-knowledge-base:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate CLAUDE.md structure
+        run: |
+          REQUIRED_SECTIONS=("## Stack" "## Quick Start" "## Architecture" "## Where to Look" "## Key Rules")
+          MISSING=0
+          for section in "${REQUIRED_SECTIONS[@]}"; do
+            if ! grep -q "$section" CLAUDE.md; then
+              echo "MISSING SECTION: $section"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          if [ $MISSING -gt 0 ]; then
+            echo "❌ CLAUDE.md is missing $MISSING required section(s)."
+            exit 1
+          fi
+          echo "✅ CLAUDE.md has all required sections."
+
+      - name: Check doc freshness
+        run: |
+          echo "Checking docs modified more than 30 days ago..."
+          THIRTY_DAYS_AGO=$(date -d "30 days ago" +%s 2>/dev/null || date -v-30d +%s 2>/dev/null)
+          for md in $(find docs -name "*.md" -type f); do
+            LAST_MODIFIED=$(git log -1 --format="%ct" -- "$md" 2>/dev/null || echo "0")
+            if [ "$LAST_MODIFIED" != "0" ] && [ "$LAST_MODIFIED" -lt "$THIRTY_DAYS_AGO" ]; then
+              DAYS_AGO=$(( ($(date +%s) - LAST_MODIFIED) / 86400 ))
+              echo "STALE ($DAYS_AGO days): $md"
+            fi
+          done
+          echo "✅ Freshness check complete."
