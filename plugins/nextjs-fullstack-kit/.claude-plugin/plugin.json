@@ -17,6 +17,5 @@
     "./agents/db-architect.md",
     "./agents/quality-guard.md",
     "./agents/task-driver.md"
-  ],
-  "hooks": "./hooks/hooks.json"
+  ]
 }
